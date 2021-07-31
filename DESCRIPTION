@@ -18,4 +18,15 @@ Depends:
     R (>= 2.10)
 Imports: 
     set,
-    do
+    do,
+    haven,
+    xml2,
+    rvest,
+    expss,
+    tmcn,
+    stringr,
+    crayon,
+    data.table,
+    tools,
+    kableExtra,
+    purrr

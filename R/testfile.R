@@ -103,9 +103,6 @@ filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE){
             }
             cat(crayon::blue(paste0(' download: ',filesize(fn),')')))
         }
-        # tablej <- filek
-        # file <- update
-        write.table(tablej,file,row.names = FALSE,sep = '\t')
         # add tsv and label
         if (cat) cat('-')
         xpt2tsv_label(xpt = fn)
@@ -118,6 +115,7 @@ filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE){
         # add update
         if (cat) cat('-')
         (file <- do::Replace(fn,tools::file_ext(fn),'update'))
+        write.table(tablej,file,row.names = FALSE,sep = '\t')
     }
 }
 
