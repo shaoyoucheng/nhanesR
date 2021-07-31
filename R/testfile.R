@@ -103,9 +103,8 @@ filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE){
             }
             cat(crayon::blue(paste0(' download: ',filesize(fn),')')))
         }
-
-        tablej <- filek
-        file <- update
+        # tablej <- filek
+        # file <- update
         write.table(tablej,file,row.names = FALSE,sep = '\t')
         # add tsv and label
         if (cat) cat('-')
