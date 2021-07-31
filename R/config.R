@@ -85,7 +85,7 @@ config_years <- function(years){
 #' }
 config_data <- function(data){
     if (do::cnOS()){
-        setdata <- tmcn::toUTF8("\u6210\u529F\u914D\u7F6E\u4EE5\u4E0B\u5E74\u4EFD")
+        setdata <- tmcn::toUTF8("\u6210\u529F\u914D\u7F6E\u4EE5\u4E0B\u6570\u636E")
     }else{
         setdata <- 'config data: '
     }
