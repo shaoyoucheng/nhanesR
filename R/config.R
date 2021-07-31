@@ -40,7 +40,7 @@ config_path <- function(path){
 
 #' Config years of 'NHANES' database
 #'
-#' @param years years of 'NHANES' database. If years is missing, nhs_year_web() will be
+#' @param years years of 'NHANES' database. If years is missing, nhs_years_web() will be
 #'     used to be added.
 #'
 #' @return add "years.nhanes" file to "nhanesR" directory
@@ -52,7 +52,7 @@ config_years <- function(years){
     }else{
         setyears <- 'config years: '
     }
-    if (missing(years)) years <- nhs_year_web()
+    if (missing(years)) years <- nhs_years_web()
     years <- do::increase(years)
     temp <- config_temp()
     if (!dir.exists(temp)) dir.create(temp,showWarnings = FALSE,recursive = TRUE)

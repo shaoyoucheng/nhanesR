@@ -7,7 +7,7 @@
 config_years(years)
 }
 \arguments{
-\item{years}{years of 'NHANES' database. If years is missing, nhs_year_web() will be
+\item{years}{years of 'NHANES' database. If years is missing, nhs_years_web() will be
 used to be added.}
 }
 \value{
