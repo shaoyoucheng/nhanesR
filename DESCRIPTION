@@ -29,4 +29,5 @@ Imports:
     data.table,
     tools,
     kableExtra,
-    purrr
+    purrr,
+    foreign
