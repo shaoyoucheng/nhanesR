@@ -7,7 +7,7 @@
 \alias{nhs_file_pg}
 \title{available data in NHANES database}
 \usage{
-nhs_file_web(years, data, cat = TRUE)
+nhs_file_web(years, data, cat = TRUE, withdrawn = FALSE)
 
 nhs_file_pc(data, years, type, cat = TRUE)
 
@@ -17,6 +17,8 @@ nhs_file_pg(data, years, type, cat = TRUE)
 \item{years}{one or more years}
 
 \item{cat}{logical, wheter to show the process}
+
+\item{withdrawn}{logical, whether include withdrawned file}
 }
 \value{
 available data

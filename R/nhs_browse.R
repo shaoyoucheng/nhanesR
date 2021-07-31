@@ -9,14 +9,14 @@ nhs_browse <- function(years,data){
     if (missing(years) & missing(data)){
         browseURL('https://wwwn.cdc.gov/nchs/nhanes/')
     }else if (!missing(years) & missing(data)){
-        years <- prepare_years_web(years) |>
+        years <- prepare_years(years) |>
             do::Replace0('-.*')
         for (i in years) {
             urls <- sprintf('https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=%s',i)
             browseURL(urls)
         }
     }else if (!missing(years) & !missing(data)){
-        years <- prepare_years_web(years) |>
+        years <- prepare_years(years) |>
             do::Replace0('-.*')
         data <- prepare_data(data)
         if (length(data)==0) stop(datawrong, paste0(d5,collapse = ', '))
@@ -27,7 +27,7 @@ nhs_browse <- function(years,data){
             }
         }
     }else if (missing(years) & !missing(data)){
-        years <- prepare_years_web(years) |>
+        years <- prepare_years(years) |>
             do::Replace0('-.*')
         data <- prepare_data(data)
         if (length(data)==0) stop(datawrong, paste0(d5,collapse = ', '))

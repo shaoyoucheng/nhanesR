@@ -2,6 +2,7 @@
 #'
 #' @param years one or more years
 #' @param cat logical, wheter to show the process
+#' @param withdrawn logical, whether include withdrawned file
 #' @return available data
 #' @name nhs_file
 #' @export
@@ -10,7 +11,7 @@
 #' # nhs_file_web(years=1999,data=c('d','e','l','q'))
 #' # nhs_file_web(years=2019,data=c('d','e','l','q'))
 #' # nhs_file_web(nhs_year(range = F),'demo')
-nhs_file_web <- function(years,data,cat=TRUE){
+nhs_file_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
 
     if (do::cnOS()){
         retrieve <-tmcn::toUTF8("\u63D0\u53D6\u6570\u636E(\u5E74):")
@@ -19,17 +20,15 @@ nhs_file_web <- function(years,data,cat=TRUE){
         retrieve <-'retrieve data (year):'
         data0 <- 'data is not right, which should be: '
     }
-    years <- prepare_years_web(years)
-    data <- prepare_data(data)
-    if (length(data)==0) stop(data0, paste0(d5,collapse = ', '))
-
+    (years <- prepare_years(years))
+    (data <- prepare_data(data))
     (dt <- rep(data,each=length(years)))
     (ys <- rep(do::Replace0(years,'-.*'),length(data)))
     urls <- sprintf('https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=%s&CycleBeginYear=%s',
                     dt,ys)
     urls <- urls[order(ys)]
-    dt <- dt[order(ys)]
-    ys <- ys[order(ys)]
+    (dt <- dt[order(ys)])
+    (ys <- ys[order(ys)])
     for (i in 1:length(urls)) {
 
         if (i==1){
@@ -40,7 +39,11 @@ nhs_file_web <- function(years,data,cat=TRUE){
             if (ys[i] != ys[i-1]) if (cat) cat('\n',years[i])
         }
         if (cat) cat('  ',dt[i])
-        html <- xml2::read_html(urls[i])
+        wait <- TRUE
+        while (wait) {
+            html <- tryCatch(xml2::read_html(urls[i]),error=function(e) 'e')
+            wait <- ifelse(is.character(html),TRUE,FALSE)
+        }
         tbl <- html |>
             rvest::html_table()
         if (length(tbl)==0){
@@ -67,19 +70,56 @@ nhs_file_web <- function(years,data,cat=TRUE){
             ck <- do::left(url2,2) == '..' & !is.na(url2)
             url2[ck] <- do::Replace(url2[ck],'\\.\\.','/nchs/nhanes')
 
-            dfi <- cbind(year=ys[i],
+            dfi <- cbind(year=prepare_years(ys[i]),
                          data=dt[i],
                          df,
                          'DOC  url'=paste0('https://wwwn.cdc.gov',url1),
                          'Data url'=paste0('https://wwwn.cdc.gov',url2))
+            ck <- do::file.name(url2)  |> tolower() == "dxa.aspx"
+            if (any(ck)){
+                dx <- dxa.aspx(url = dfi$`DOC  url`[ck],
+                               years = ys[i],
+                               data=dt[i])
+                dfi[ck,] <- dx
+            }
             res <- c(res,list(dfi))
         }
     }
     x <- do.call(plyr::rbind.fill,res)
     class(x) <- c('nhs_file','data.frame')
+    if (!withdrawn) x <- x[tolower(x$`Date Published`) != 'withdrawn',]
     x
 }
 
+dxa.aspx <- function(url,years,data){
+    wait <- TRUE
+    while (wait) {
+        html <- tryCatch(xml2::read_html(url), error=function(e) 'e')
+        wait <- ifelse(is.character(html),TRUE,FALSE)
+    }
+    # xpturl
+    xpturl <- html |>
+        rvest::html_elements(xpath = '//table[@id="GridView1"]/tbody/tr') |>
+        set::grep_and(years) |>
+        rvest::html_elements(xpath = 'td[4]/a') |>
+        do::attr_href() |>
+        sprintf(fmt = 'https://wwwn.cdc.gov%s')
+    # docurl
+    docurl <- html |>
+        rvest::html_elements(xpath = '//table[@id="GridView1"]/tbody/tr') |>
+        set::grep_and(years) |>
+        rvest::html_elements(xpath = 'td[3]/a') |>
+        do::attr_href() |>
+        sprintf(fmt = 'https://wwwn.cdc.gov%s')
+    # ftablej
+    ftablej <- html |>
+        rvest::html_elements(xpath = '//table[@id="GridView1"]') |>
+        rvest::html_table() |>
+        do::select(1,drop=TRUE) |>
+        as.data.frame()
+    ftablej <- ftablej[grepl(years,ftablej$Years),]
+    cbind(years=ftablej[,1],data,ftablej[,-1],docurl,xpturl)
+}
 listn <- function(x,n=1){
     x[[n]]
 }

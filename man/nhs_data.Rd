@@ -3,15 +3,9 @@
 \name{nhs_data}
 \alias{nhs_data}
 \alias{nhs_data_web}
-\alias{nhs_data_pc}
-\alias{nhs_data_pg}
 \title{available data in NHANES database}
 \usage{
 nhs_data_web(years, cat = TRUE)
-
-nhs_data_pc(years, cat = TRUE)
-
-nhs_data_pg(years, cat = TRUE)
 }
 \arguments{
 \item{years}{one or more years}

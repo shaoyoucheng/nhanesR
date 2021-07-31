@@ -2,16 +2,10 @@
 % Please edit documentation in R/nhs_year.R
 \name{nhs_year}
 \alias{nhs_year}
-\alias{nhs_year_web}
-\alias{nhs_year_pc}
-\alias{nhs_year_pg}
+\alias{nhs_years_web}
 \title{available Year in NHANES database}
 \usage{
-nhs_year_web(range = TRUE)
-
-nhs_year_pc(range = TRUE)
-
-nhs_year_pg(range = TRUE)
+nhs_years_web(range = TRUE)
 }
 \arguments{
 \item{range}{whether to show year interval}
@@ -23,7 +17,5 @@ available year, two years interval
 available Year in NHANES database
 }
 \examples{
-nhs_year_web()
-nhs_year_pc()
-nhs_year_pg()
+nhs_years_web()
 }

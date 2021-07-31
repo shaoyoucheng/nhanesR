@@ -12,12 +12,13 @@ nhs_view <- function(x,...) UseMethod('nhs_view')
 #' @export
 #'
 nhs_view.nhs_file <- function(x,...){
-    kableExtra::kbl(x[,1:6],
+    x <- cbind(seq=1:nrow(x),x)
+    kableExtra::kbl(x[,1:7],
                     escape = FALSE,
-                    align=c('c','l','l','l','l','l')) |>
+                    align=c('c','c','l','l','l','l','l')) |>
         kableExtra::kable_paper("striped") |>
-        kableExtra::column_spec(4,link = x$`DOC  url`) |>
-        kableExtra::column_spec(5,link = x$`Data url`) |>
+        kableExtra::column_spec(5,link = x$`DOC  url`) |>
+        kableExtra::column_spec(6,link = x$`Data url`) |>
         kableExtra::row_spec(0,align = 'c')
 
 }

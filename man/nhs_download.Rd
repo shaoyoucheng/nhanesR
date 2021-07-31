@@ -4,7 +4,7 @@
 \alias{nhs_download}
 \title{Download data from 'NHANES' database}
 \usage{
-nhs_download(years, data, files, mode)
+nhs_download(years, data, files, mode, filetable, cat = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
