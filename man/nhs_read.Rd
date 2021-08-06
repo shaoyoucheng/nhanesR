@@ -4,18 +4,16 @@
 \alias{nhs_read}
 \title{Read data from 'NHANES' database in local PC}
 \usage{
-nhs_read(..., years, exclude = NULL, var.label = FALSE, cookbook = FALSE)
+nhs_read(..., label = FALSE, codebook = FALSE, nrows = Inf)
 }
 \arguments{
-\item{...}{one or more data file name.}
+\item{...}{one or more data file path}
 
-\item{years}{one or years}
+\item{label}{logical, whether to add label for variable}
 
-\item{exclude}{exclude some file}
+\item{codebook}{logical, whether to decode variable}
 
-\item{var.label}{logical, whether to add label for variable}
-
-\item{cookbook}{logical, whether to decode variable}
+\item{nrows}{The maximum number of rows to read.}
 }
 \value{
 a list contains dataframe
@@ -25,6 +23,9 @@ Read data from 'NHANES' database in local PC
 }
 \examples{
 \donttest{
-nhs_read('demo')
+
+demo <- nhs_files_pc(pattern = 'demo',file_ext = 'tsv') |>
+        set::grep_not_or('p_demo')
+nhs_read(demo)
 }
 }

@@ -18,11 +18,12 @@ nhs_years_web <- function(range=TRUE){
 }
 
 
-# #' @rdname nhs_year
-# #' @export
-#
-# nhs_year_pg <- function(range=TRUE){
-#
-#     # if (!range) years <- do::Replace0(years,'-.*')
-#     # years
-# }
+#' @rdname nhs_year
+#' @export
+nhs_year_pc <- function(range=TRUE){
+    get_config_path() |>
+        list.files() |>
+        stringr::str_extract('[0-9]{4}-[0-9]{4}') |>
+        unique() |>
+        do::increase()
+}

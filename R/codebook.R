@@ -3,7 +3,7 @@
 #     data <- prepare_data(data)
 #     for (i in years) {
 #         for (j in data) {
-#             x <- nhs_file_web(2001,'die',FALSE)
+#             x <- nhs_files_web(2001,'die',FALSE)
 #             doc_url <- x$`DOC  url`
 #             if (!missing(files)){
 #                 fn <- do::file.name(x$`DOC  url`)

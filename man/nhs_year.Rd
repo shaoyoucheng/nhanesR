@@ -3,9 +3,12 @@
 \name{nhs_year}
 \alias{nhs_year}
 \alias{nhs_years_web}
+\alias{nhs_year_pc}
 \title{available Year in NHANES database}
 \usage{
 nhs_years_web(range = TRUE)
+
+nhs_year_pc(range = TRUE)
 }
 \arguments{
 \item{range}{whether to show year interval}

@@ -4,7 +4,7 @@
 \alias{nhs_download}
 \title{Download data from 'NHANES' database}
 \usage{
-nhs_download(years, data, files, mode, filetable, cat = TRUE)
+nhs_download(years, data, files, mode, filetable, cat = TRUE, redown = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
@@ -14,6 +14,8 @@ nhs_download(years, data, files, mode, filetable, cat = TRUE)
 \item{files}{which files to be download}
 
 \item{mode}{character. The mode with which to write the file. Useful values are "wb" (binary), "w" and "ab".}
+
+\item{redown}{logical. whether to download the existed file.}
 }
 \value{
 download 'NHANES' database data into local computer and keep the same order.

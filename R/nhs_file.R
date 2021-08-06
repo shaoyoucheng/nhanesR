@@ -4,14 +4,14 @@
 #' @param cat logical, wheter to show the process
 #' @param withdrawn logical, whether include withdrawned file
 #' @return available data
-#' @name nhs_file
+#' @name nhs_files
 #' @export
 #'
 #' @examples
-#' # nhs_file_web(years=1999,data=c('d','e','l','q'))
-#' # nhs_file_web(years=2019,data=c('d','e','l','q'))
-#' # nhs_file_web(nhs_year(range = F),'demo')
-nhs_file_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
+#' # nhs_files_web(years=1999,data=c('d','e','l','q'))
+#' # nhs_files_web(years=2019,data=c('d','e','l','q'))
+#' # nhs_files_web(nhs_year(range = F),'demo')
+nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
 
     if (do::cnOS()){
         retrieve <-tmcn::toUTF8("\u63D0\u53D6\u6570\u636E(\u5E74):")
@@ -26,7 +26,7 @@ nhs_file_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
     (ys <- rep(do::Replace0(years,'-.*'),length(data)))
     urls <- sprintf('https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=%s&CycleBeginYear=%s',
                     dt,ys)
-    urls <- urls[order(ys)]
+    (urls <- urls[order(ys)])
     (dt <- dt[order(ys)])
     (ys <- ys[order(ys)])
     for (i in 1:length(urls)) {
@@ -76,18 +76,25 @@ nhs_file_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
                          'DOC  url'=paste0('https://wwwn.cdc.gov',url1),
                          'Data url'=paste0('https://wwwn.cdc.gov',url2))
             ck <- do::file.name(url2)  |> tolower() == "dxa.aspx"
+            ck[is.na(ck)] <- FALSE
             if (any(ck)){
                 dx <- dxa.aspx(url = dfi$`DOC  url`[ck],
                                years = ys[i],
                                data=dt[i])
                 dfi[ck,] <- dx
             }
+            ck <- dfi$`Data url` |> do::duplicated_last()
+            if (any(ck)){
+                dfi <- dfi[!ck,]
+            }
+            row.names(dfi) <- NULL
             res <- c(res,list(dfi))
         }
     }
     x <- do.call(plyr::rbind.fill,res)
     class(x) <- c('nhs_file','data.frame')
     if (!withdrawn) x <- x[tolower(x$`Date Published`) != 'withdrawn',]
+    rownames(x) <- NULL
     x
 }
 
@@ -131,33 +138,23 @@ df.tolower <- function(x){
 }
 
 
-#' @rdname nhs_file
+#' @rdname nhs_files
 #' @export
+#' @param pattern for nhs_files_pc()
+#' @param file_ext file extensions for nhs_files_pc()
 #'
-nhs_file_pc <- function(data,years,type,cat=TRUE){
-
-    if (do::cnOS()){
-        nolocal <- tmcn::toUTF8("\u6CA1\u6709\u672C\u5730\u6570\u636E\u5E93,\u8BF7\u4F7F\u7528nhs_path()\u914D\u7F6E\u672C\u5730\u6570\u636E\u5E93")
-    }else{
-        nolocal <- tmcn::toUTF8("\u6CA1\u6709\u672C\u5730\u6570\u636E\u5E93,\u8BF7\u4F7F\u7528nhs_path()\u914D\u7F6E\u672C\u5730\u6570\u636E\u5E93")
-    }
-    if (is.null(nhs.path)){
-        message(nolocal)
-    }else{
-        years <- prepare_years_pc(years)
-        data <- prepare_data(data)
-        if (missing(type)){
-            lapply(years, function(i) paste0(nhs.path,'/',i,'/',data) |>
-                       list.files(full.names = TRUE) |>
-                       file.info2(i)) |>
-                do.call(what = rbind)
-        }else{
-            lapply(years, function(i) paste0(nhs.path,'/',i,'/',data) |>
-                       list.files(type,full.names = TRUE) |>
-                       file.info2(i)) |>
-                do.call(what = rbind)
-        }
-    }
+nhs_files_pc <- function(data,years,pattern=NULL,file_ext,cat=TRUE){
+    if (missing(years)) years <- nhs_year_pc()
+    years <- prepare_years(years)
+    data <- prepare_data(data)
+    d1 <- get_config_path() %+% '/' %+% years %+% '/'
+    d2 <- lapply(d1, function(i) i %+% data)
+    d3 <- do.call(c,d2)
+    if (missing(file_ext)) file_ext <- c("sas7bdat","codebook","label","tsv","update","xpt")
+    if (!is.null(pattern)) pattern <- paste0(pattern,collapse = '|')
+    f1 <- list.files(path = d3,pattern = pattern,full.names = TRUE)
+    ck <- tools::file_ext(f1) %in% file_ext
+    f1[ck]
 }
 
 select_df <- function(x,...){
@@ -180,9 +177,9 @@ file.info2 <- function(file,i){
 }
 
 
-#' @rdname nhs_file
+#' @rdname nhs_files
 #' @export
 #'
-nhs_file_pg <- function(data,years,type,cat=TRUE){
+nhs_files_pg <- function(data,years,type,cat=TRUE){
 
 }

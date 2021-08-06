@@ -4,7 +4,7 @@
 \alias{nhs_update}
 \title{update "NHANES" database}
 \usage{
-nhs_update(years, data, download = TRUE)
+nhs_update(years, data, download = TRUE, redown = TRUE)
 }
 \arguments{
 \item{years}{one or more years}

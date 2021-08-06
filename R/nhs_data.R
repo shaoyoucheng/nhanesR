@@ -16,7 +16,7 @@ nhs_data_web <- function(years,cat=TRUE){
     }else{
         retrieve <-'retrieve data (year):'
     }
-    years <- prepare_years_pc(years)
+    years <- prepare_years(years)
     urls <- paste0('https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=',do::Replace0(years,'-.*'))
     for (i in 1:length(urls)) {
         if (cat) cat('\n',retrieve,years[i])
@@ -45,8 +45,13 @@ nhs_data_web <- function(years,cat=TRUE){
 
 
 
-# @rdname nhs_data
-# @export
-# nhs_data_pg <- function(years,cat=TRUE){
-#
-# }
+#' @rdname nhs_data
+#' @export
+nhs_data_pc <- function(years){
+    if (missing(years)) years <- nhs_year_pc()
+    years <- prepare_years(years)
+    urls <- paste0(get_config_path(),'/',years)
+    res <- lapply(urls, function(i) list.files(i))
+    names(res) <- years
+    do.call(rbind,res) |> data.frame()
+}

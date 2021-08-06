@@ -1,3 +1,11 @@
+#' Browse "NHANES" webpage
+#'
+#' @param years one or more years
+#' @param data one or more data
+#'
+#' @return browse webpage
+#' @export
+#'
 nhs_browse <- function(years,data){
     if (do::cnOS()){
         misys <- tmcn::toUTF8("\u6307\u5B9Adata\u7684\u65F6\u5019,\u5FC5\u987B\u6307\u5B9Ayears")
