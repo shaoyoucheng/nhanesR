@@ -4,12 +4,12 @@
 \alias{nhs_download}
 \title{Download data from 'NHANES' database}
 \usage{
-nhs_download(years, data, files, mode, filetable, cat = TRUE, redown = TRUE)
+nhs_download(years, items, files, mode, filetable, cat = TRUE, redown = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
 
-\item{data}{one or more data}
+\item{items}{one or more items}
 
 \item{files}{which files to be download}
 
@@ -25,6 +25,6 @@ Download data from 'NHANES' database
 }
 \examples{
 \donttest{
-nhs_download(years = c(2017,2019),data = c('d','l'))
+nhs_download(years = c(2017,2019),items = c('d','l'))
 }
 }

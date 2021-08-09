@@ -1,20 +1,20 @@
-#' available data in NHANES database
+#' available items in NHANES database
 #'
 #' @param years one or more years
 #' @param cat logical, wheter to show the process
-#' @name nhs_data
-#' @return available data
+#' @name nhs_items
+#' @return available items
 #' @export
 #'
 #' @examples
-#' nhs_data_web(years=1999)
-#' nhs_data_web(years=c(1999,2001))
-#' nhs_data_web(nhs_year(range = F))
-nhs_data_web <- function(years,cat=TRUE){
+#' nhs_items_web(years=1999)
+#' nhs_items_web(years=c(1999,2001))
+#' nhs_items_web(nhs_year(range = F))
+nhs_items_web <- function(years,cat=TRUE){
     if (do::cnOS()){
         retrieve <-tmcn::toUTF8("\u63D0\u53D6\u6570\u636E(\u5E74):")
     }else{
-        retrieve <-'retrieve data (year):'
+        retrieve <-'retrieve items (year):'
     }
     years <- prepare_years(years)
     urls <- paste0('https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=',do::Replace0(years,'-.*'))
@@ -27,15 +27,15 @@ nhs_data_web <- function(years,cat=TRUE){
                                   error=function(e) 'e')
             wait <- ifelse(is.character(year_html),TRUE,FALSE)
         }
-        data_href = year_html |>
+        items_href = year_html |>
             rvest::html_elements(xpath = '//a[@class="list-title td-none td-ul-hover"]') |>
             set::grep_and('Component=') |>
             do::attr_href() |>
             do::Replace0('.*datapage\\.aspx\\?Component=') |>
             do::Replace0('&CycleBeginYear.*')
-        data_href = set::grep_not_and(data_href,'LimitedAccess')
-        if (length(data_href)==0) data_href <- rep(NA,5)
-        res <- c(res,list(data_href))
+        items_href = set::grep_not_and(items_href,'LimitedAccess')
+        if (length(items_href)==0) items_href <- rep(NA,5)
+        res <- c(res,list(items_href))
         names(res)[i] <- years[i]
     }
     if (cat) cat('\n\n')
@@ -45,9 +45,9 @@ nhs_data_web <- function(years,cat=TRUE){
 
 
 
-#' @rdname nhs_data
+#' @rdname nhs_items
 #' @export
-nhs_data_pc <- function(years){
+nhs_items_pc <- function(years){
     if (missing(years)) years <- nhs_year_pc()
     years <- prepare_years(years)
     urls <- paste0(get_config_path(),'/',years)

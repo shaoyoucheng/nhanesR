@@ -4,12 +4,12 @@
 \alias{nhs_update}
 \title{update "NHANES" database}
 \usage{
-nhs_update(years, data, download = TRUE, redown = TRUE)
+nhs_update(years, items, download = TRUE, redown = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
 
-\item{data}{one or more data}
+\item{items}{one or more items}
 
 \item{download}{logical. Whether to download}
 }

@@ -4,14 +4,14 @@
 \alias{nhs_files}
 \alias{nhs_files_web}
 \alias{nhs_files_pc}
-\alias{nhs_files_pg}
+\alias{nhs_files_tsv}
 \title{available data in NHANES database}
 \usage{
-nhs_files_web(years, data, cat = TRUE, withdrawn = FALSE)
+nhs_files_web(years, items, cat = TRUE, withdrawn = FALSE)
 
-nhs_files_pc(data, years, pattern = NULL, file_ext, cat = TRUE)
+nhs_files_pc(items, years, pattern = NULL, file_ext = NULL, cat = TRUE)
 
-nhs_files_pg(data, years, type, cat = TRUE)
+nhs_files_tsv(items, years, pattern = NULL, cat = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
@@ -22,7 +22,7 @@ nhs_files_pg(data, years, type, cat = TRUE)
 
 \item{pattern}{for nhs_files_pc()}
 
-\item{file_ext}{file extensions for nhs_files_pc()}
+\item{file_ext}{file extensions for nhs_files_pc(), default is NULL to list all files}
 }
 \value{
 available data
@@ -31,7 +31,7 @@ available data
 available data in NHANES database
 }
 \examples{
-# nhs_files_web(years=1999,data=c('d','e','l','q'))
-# nhs_files_web(years=2019,data=c('d','e','l','q'))
+# nhs_files_web(years=1999,items=c('d','e','l','q'))
+# nhs_files_web(years=2019,items=c('d','e','l','q'))
 # nhs_files_web(nhs_year(range = F),'demo')
 }

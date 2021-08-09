@@ -72,37 +72,37 @@ config_years <- function(years){
 
 
 
-#' Config data of 'NHANES' database
+#' Config items of 'NHANES' database
 #'
-#' @param data data of 'NHANES' database. If data is missing, Demographics,
+#' @param items items of 'NHANES' database. If items is missing, Demographics,
 #'     Dietary, Examination, Laboratory and Questionnaire will be used.
 #'
-#' @return add "data.nhanes" file to "nhanesR" directory
+#' @return add "items.nhanes" file to "nhanesR" directory
 #' @export
 #' @examples
 #' \donttest{
-#' config_data(c("Demographics", "Dietary", "Examination",  "Laboratory", "Questionnaire"))
+#' config_items(c("Demographics", "Dietary", "Examination",  "Laboratory", "Questionnaire"))
 #' }
-config_data <- function(data){
+config_items <- function(items){
     if (do::cnOS()){
-        setdata <- tmcn::toUTF8("\u6210\u529F\u914D\u7F6E\u4EE5\u4E0B\u6570\u636E")
+        setitems <- tmcn::toUTF8("\u6210\u529F\u914D\u7F6E\u4EE5\u4E0B\u6570\u636E")
     }else{
-        setdata <- 'config data: '
+        setitems <- 'config items: '
     }
-    if (missing(data)) data <- c("Demographics", "Dietary", "Examination",  "Laboratory", "Questionnaire")
-    names(data) <- NULL
+    if (missing(items)) items <- c("Demographics", "Dietary", "Examination",  "Laboratory", "Questionnaire")
+    names(items) <- NULL
     temp <- config_temp()
     if (!dir.exists(temp)) dir.create(temp,showWarnings = FALSE,recursive = TRUE)
-    (nhs_data <- paste0(temp,'/data.nhanes'))
-    write.table(x = data,file = nhs_data,row.names = FALSE,col.names = FALSE,append = FALSE)
-    message(setdata)
-    data <- read.table(nhs_data)[,1]
-    for (i in 1:length(data)) {
+    (nhs_items <- paste0(temp,'/items.nhanes'))
+    write.table(x = items,file = nhs_items,row.names = FALSE,col.names = FALSE,append = FALSE)
+    message(setitems)
+    items <- read.table(nhs_items)[,1]
+    for (i in 1:length(items)) {
         if (i==1) cat('    ')
-        cat(data[i],'')
+        cat(items[i],'')
         if (i %% 1 ==0) cat('\n    ')
     }
-    cat('\n\n',nhs_data)
+    cat('\n\n',nhs_items)
 }
 
 

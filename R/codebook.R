@@ -1,21 +1,4 @@
-# codebook <- function(years,data,files,nhs_dir='./Nhanes'){
-#     years <- prepare_years_pc(years)
-#     data <- prepare_data(data)
-#     for (i in years) {
-#         for (j in data) {
-#             x <- nhs_files_web(2001,'die',FALSE)
-#             doc_url <- x$`DOC  url`
-#             if (!missing(files)){
-#                 fn <- do::file.name(x$`DOC  url`)
-#                 doc_url <- doc_url[set::grepl_or(tolower(fn),tolower(files))]
-#             }
-#             for (k in doc_url) {
-#                 codebook_url(url = k,data= x$data[1],nhs_dir=nhs_dir)
-#             }
-#         }
-#     }
-# }
-codebook_url <- function(url,data,file){
+codebook_url <- function(url,file){
     if (tools::file_ext(url)=='pdf'){
         pdf <- paste0(do::Replace0(file,tools::file_ext(file)),'pdf')
         cat(crayon::bgWhite(' pdf'))

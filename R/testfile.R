@@ -3,29 +3,29 @@
 testfile <- function(urls,files,mode,redown=TRUE){
     for (i in 1:length(urls)) {
         (yeari <- do::Replace0(urls[i],'.*='))
-        (datai <- urlComponet(urls[i]))
+        (itemsi <- urlComponet(urls[i]))
         if (i==1){
             cat('\n',prepare_years(yeari),'\n')
-            cat('      ',datai)
+            cat('      ',itemsi)
         }else{
             if (urlyear(urls[i]) != urlyear(urls[i-1])){
                 cat('\n',prepare_years(yeari))
             }
-            if (datai != urlComponet(urls[i-1])){
-                cat('\n      ',datai)
+            if (itemsi != urlComponet(urls[i-1])){
+                cat('\n      ',itemsi)
             }
         }
-        filepage(yeari,datai,mode,files,redown=redown)
+        filepage(yeari,itemsi,mode,files,redown=redown)
         if (i == length(urls)) cat('\n')
     }
 }
 
 
-filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE,redown=TRUE,update=FALSE){
+filepage <- function(yeari,itemsi,mode,files,filetable=NULL,cat=TRUE,redown=TRUE,update=FALSE){
     if (missing(mode)) mode <- test_mode()
     # file table
     if (is.null(filetable)){
-        filetable <- nhs_files_web(yeari,datai,FALSE)
+        filetable <- nhs_files_web(yeari,itemsi,FALSE)
     }
     if (nrow(filetable)==0) return(invisible())
 
@@ -35,7 +35,7 @@ filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE,redown=TRUE,
     }
     if (cat) cat(paste0(' (',nrow(filetable),')'))
     if (nrow(filetable)==0) return(invisible())
-    (fd <- paste0(get_config_path(),'/',prepare_years(yeari),'/',datai))
+    (fd <- paste0(get_config_path(),'/',prepare_years(yeari),'/',itemsi))
     if (!dir.exists(fd))  dir.create(path = fd,showWarnings = FALSE,recursive = TRUE)
     if (cat) cat('-->',fd)
     # (j=which(tools::file_ext(tolower(filetable$`Data url`))=='zip'))
@@ -131,7 +131,7 @@ filepage <- function(yeari,datai,mode,files,filetable=NULL,cat=TRUE,redown=TRUE,
         # if (cat) cat('-')
         (file <- do::Replace(fn,tools::file_ext(fn),'codebook'))
         codebook_url(url=docj,
-                     data=datai,
+                     # items=itemsi,
                      file=file)
         # add update
         # if (cat) cat('-')

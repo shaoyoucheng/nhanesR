@@ -8,22 +8,22 @@
 #' @export
 #'
 #' @examples
-#' # nhs_files_web(years=1999,data=c('d','e','l','q'))
-#' # nhs_files_web(years=2019,data=c('d','e','l','q'))
+#' # nhs_files_web(years=1999,items=c('d','e','l','q'))
+#' # nhs_files_web(years=2019,items=c('d','e','l','q'))
 #' # nhs_files_web(nhs_year(range = F),'demo')
-nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
+nhs_files_web <- function(years,items,cat=TRUE, withdrawn=FALSE){
 
     if (do::cnOS()){
         retrieve <-tmcn::toUTF8("\u63D0\u53D6\u6570\u636E(\u5E74):")
-        data0 <- tmcn::toUTF8("data\u8D4B\u503C\u4E0D\u5BF9,\u5E94\u8BE5\u662F\u4E0B\u5217\u503C: ")
+        items0 <- tmcn::toUTF8("items\u8D4B\u503C\u4E0D\u5BF9,\u5E94\u8BE5\u662F\u4E0B\u5217\u503C: ")
     }else{
-        retrieve <-'retrieve data (year):'
-        data0 <- 'data is not right, which should be: '
+        retrieve <-'retrieve items (year):'
+        items0 <- 'items is not right, which should be: '
     }
     (years <- prepare_years(years))
-    (data <- prepare_data(data))
-    (dt <- rep(data,each=length(years)))
-    (ys <- rep(do::Replace0(years,'-.*'),length(data)))
+    (items <- prepare_items(items))
+    (dt <- rep(items,each=length(years)))
+    (ys <- rep(do::Replace0(years,'-.*'),length(items)))
     urls <- sprintf('https://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=%s&CycleBeginYear=%s',
                     dt,ys)
     (urls <- urls[order(ys)])
@@ -47,7 +47,7 @@ nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
         tbl <- html |>
             rvest::html_table()
         if (length(tbl)==0){
-            res <- c(res,list(data.frame(cbind(year=ys[i],data=dt[i]))))
+            res <- c(res,list(data.frame(cbind(year=ys[i],items=dt[i]))))
         }else{
             df <-  tbl |>
                 listn(1) |>
@@ -71,7 +71,7 @@ nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
             url2[ck] <- do::Replace(url2[ck],'\\.\\.','/nchs/nhanes')
 
             dfi <- cbind(year=prepare_years(ys[i]),
-                         data=dt[i],
+                         items=dt[i],
                          df,
                          'DOC  url'=paste0('https://wwwn.cdc.gov',url1),
                          'Data url'=paste0('https://wwwn.cdc.gov',url2))
@@ -80,7 +80,7 @@ nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
             if (any(ck)){
                 dx <- dxa.aspx(url = dfi$`DOC  url`[ck],
                                years = ys[i],
-                               data=dt[i])
+                               items=dt[i])
                 dfi[ck,] <- dx
             }
             ck <- dfi$`Data url` |> do::duplicated_last()
@@ -98,7 +98,7 @@ nhs_files_web <- function(years,data,cat=TRUE, withdrawn=FALSE){
     x
 }
 
-dxa.aspx <- function(url,years,data){
+dxa.aspx <- function(url,years,items){
     wait <- TRUE
     while (wait) {
         html <- tryCatch(xml2::read_html(url), error=function(e) 'e')
@@ -125,7 +125,7 @@ dxa.aspx <- function(url,years,data){
         do::select(1,drop=TRUE) |>
         as.data.frame()
     ftablej <- ftablej[grepl(years,ftablej$Years),]
-    cbind(years=ftablej[,1],data,ftablej[,-1],docurl,xpturl)
+    cbind(years=ftablej[,1],items,ftablej[,-1],docurl,xpturl)
 }
 listn <- function(x,n=1){
     x[[n]]
@@ -141,16 +141,16 @@ df.tolower <- function(x){
 #' @rdname nhs_files
 #' @export
 #' @param pattern for nhs_files_pc()
-#' @param file_ext file extensions for nhs_files_pc()
+#' @param file_ext file extensions for nhs_files_pc(), default is NULL to list all files
 #'
-nhs_files_pc <- function(data,years,pattern=NULL,file_ext,cat=TRUE){
+nhs_files_pc <- function(items,years,pattern=NULL,file_ext=NULL,cat=TRUE){
     if (missing(years)) years <- nhs_year_pc()
     years <- prepare_years(years)
-    data <- prepare_data(data)
+    items <- prepare_items(items)
     d1 <- get_config_path() %+% '/' %+% years %+% '/'
-    d2 <- lapply(d1, function(i) i %+% data)
+    d2 <- lapply(d1, function(i) i %+% items)
     d3 <- do.call(c,d2)
-    if (missing(file_ext)) file_ext <- c("sas7bdat","codebook","label","tsv","update","xpt")
+    if (is.null(file_ext)) file_ext <- c("sas7bdat","codebook","label","tsv","update","xpt")
     if (!is.null(pattern)) pattern <- paste0(pattern,collapse = '|')
     f1 <- list.files(path = d3,pattern = pattern,full.names = TRUE)
     ck <- tools::file_ext(f1) %in% file_ext
@@ -164,14 +164,14 @@ select_df <- function(x,...){
 file.info2 <- function(file,i){
     info <<- file.info(file)
     yeari <- i
-    datai <- rownames(info) |>
+    itemsi <- rownames(info) |>
         do::Replace0(paste0('.*',i,'/')) |>
         do::Replace0('/.*')
     filei <- rownames(info) |>
         do::Replace0('.*/')
     size <- sapply(info$size,size_bt2unit)
     mtime <- as.character(info$mtime)
-    cbind(year=yeari,data=datai,file=filei,size=size,mtime=mtime) |>
+    cbind(year=yeari,items=itemsi,file=filei,size=size,mtime=mtime) |>
         data.frame()
 
 }
@@ -180,6 +180,17 @@ file.info2 <- function(file,i){
 #' @rdname nhs_files
 #' @export
 #'
-nhs_files_pg <- function(data,years,type,cat=TRUE){
-
+nhs_files_tsv <- function(items,years,pattern=NULL,cat=TRUE){
+    file_ext='tsv'
+    if (missing(years)) years <- nhs_year_pc()
+    years <- prepare_years(years)
+    items <- prepare_items(items)
+    d1 <- get_config_path() %+% '/' %+% years %+% '/'
+    d2 <- lapply(d1, function(i) i %+% items)
+    d3 <- do.call(c,d2)
+    if (is.null(file_ext)) file_ext <- c("sas7bdat","codebook","label","tsv","update","xpt")
+    if (!is.null(pattern)) pattern <- paste0(pattern,collapse = '|')
+    f1 <- list.files(path = d3,pattern = pattern,full.names = TRUE)
+    ck <- tools::file_ext(f1) %in% file_ext
+    f1[ck]
 }

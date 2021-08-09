@@ -1,41 +1,39 @@
-#' Select column for nhs_read() result
+#' Rename column names for result of nhs_read()
 #'
-#' @param nhs result of nhs_read()
-#' @param exact exact column names
-#' @param grep fuzzy match
-#' @param ex_grep exclude by fuzzy match
+#' @param data result of nhs_read()
+#' @param ... paired names, connected by colon.
+#' @param select logical. whether to select the
 #'
-#' @return selected list
+#' @return
 #' @export
 #'
-nhs_select <- function(nhs,exact=NULL,grep=NULL,ex_grep=NULL){
-    # exact
-    if (!is.null(exact)){
-        exact <- unique(tolower(exact))
-        jdg1 <- lapply(nhs, function(i) names(i) %in% exact)
-    }else{
-        (jdg1 <- lapply(nhs, function(i) rep(FALSE,ncol(i))))
+nhs_select <- function(data,...){
+    names <- c(...)
+    # return(names)
+    (from <- strsplit(names,' {0,}: {0,}') |> do::select(j=1) |> unlist())
+    (select <- strsplit(from,',') |> unlist() |> unique())
+    (to <- strsplit(names,' {0,}: {0,}') |> do::select(j=2) |> unlist())
+    for (i in 1:length(data)) {
+        di <- data[[i]]
+        # select
+        di <- di[,colnames(di) %in% select,drop=FALSE]
+        # rename
+        for (j in 1:length(from)) {
+            if (is.na(to[j])) next(j)
+            fromj <- from[j] |> strsplit(' {0,}, {0,}') |> unlist() |> unique()
+            colnames(di)[colnames(di) %in% fromj] <- to[j]
+        }
+        data[[i]] <- di
     }
-
-    # grep
-    if (!is.null(grep)){
-        pattern <- paste0(tolower(grep),collapse = '|')
-        jdg2 <- lapply(nhs, function(i) grepl(pattern,names(i)))
+    (ck <- sapply(2:length(data), function(i) do::increase(colnames(data[[1]])) == do::increase(colnames(data[[i]]))))
+    if (all(ck)){
+        for (i in 1:length(data)) {
+            di <- cbind(Year=names(data)[i],data[[i]])
+            data[[i]] <- di
+        }
+        names(data)=NULL
+        do.call(rbind,data) |> as.data.frame()
     }else{
-        (jdg2 <- lapply(nhs, function(i) rep(FALSE,ncol(i))))
+        data
     }
-
-    # ex_grep
-    if (!is.null(ex_grep)){
-        pattern <- paste0(tolower(ex_grep),collapse = '|')
-        jdg3 <- lapply(nhs, function(i) !grepl(pattern,names(i)))
-    }else{
-        (jdg3 <- lapply(nhs, function(i) rep(TRUE,ncol(i))))
-    }
-    r <- lapply(1:length(nhs), function(i){
-        jdg <- (jdg1[[i]] | jdg2[[i]]) & jdg3[[i]]
-        nhs[[i]][,jdg,drop=FALSE]
-    })
-    names(r) <- names(nhs)
-    r
 }

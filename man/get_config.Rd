@@ -3,13 +3,13 @@
 \name{get_config}
 \alias{get_config}
 \alias{get_config_path}
-\alias{get_config_data}
+\alias{get_config_items}
 \alias{get_config_years}
 \title{Get config information of "NHANES" database}
 \usage{
 get_config_path()
 
-get_config_data()
+get_config_items()
 
 get_config_years(range = TRUE)
 }
@@ -26,7 +26,7 @@ Get config information of "NHANES" database
 \donttest{
 get_config_path()
 get_config_years()
-get_config_data()
+get_config_items()
 
 }
 }

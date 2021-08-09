@@ -4,30 +4,26 @@
 \alias{nhs_select}
 \title{Select column for results of nhs_read() function}
 \usage{
-nhs_select(nhs, exact = NULL, grep = NULL, ex_grep = NULL)
+nhs_select(data, ...)
 
-nhs_select(nhs, exact = NULL, grep = NULL, ex_grep = NULL)
+nhs_select(data, ...)
 }
 \arguments{
-\item{nhs}{result of nhs_read()}
+\item{data}{result of nhs_read()}
 
-\item{exact}{exact column names}
-
-\item{grep}{fuzzy match}
-
-\item{ex_grep}{exclude by fuzzy match}
+\item{...}{paired names, connected by colon.}
 
 \item{x}{results of nhs_read() function}
 
-\item{...}{one ore more columns}
+\item{select}{logical. whether to select the}
 }
 \value{
 selected column data
 
-selected list
+
 }
 \description{
 Select column for results of nhs_read() function
 
-Select column for nhs_read() result
+Rename column names for result of nhs_read()
 }

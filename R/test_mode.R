@@ -1,7 +1,7 @@
 
 
-test_mode <- function(years=1999,data='die'){
-    fl <- nhs_files_web(years,data,FALSE)
+test_mode <- function(years=1999,items='die'){
+    fl <- nhs_files_web(years,items,FALSE)
     ck <- fl$`Data File` |> set::grepl_and('kb')
     fl <- fl[ck,]
     url <- fl$`Data url`[1]

@@ -6,12 +6,12 @@
 The error file is defined by the absence of the following five formats: xpt or sas7bdat,
 tsv, label, codebook and update.}
 \usage{
-nhs_check(years, data)
+nhs_check(years, items)
 }
 \arguments{
 \item{years}{one or more years}
 
-\item{data}{one or more data}
+\item{items}{one or more items}
 }
 \value{
 if error files exist, green text will be print.

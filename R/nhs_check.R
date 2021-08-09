@@ -2,7 +2,7 @@
 #' The error file is defined by the absence of the following five formats: xpt or sas7bdat,
 #' tsv, label, codebook and update.
 #' @param years one or more years
-#' @param data one or more data
+#' @param items one or more items
 #'
 #' @return if error files exist, green text will be print.
 #' @export
@@ -11,11 +11,11 @@
 #' \donttest{
 #' nhs_check()
 #' }
-nhs_check <- function(years,data){
+nhs_check <- function(years,items){
     (years <- prepare_years(years))
-    (data <- prepare_data(data))
-    (dt <- rep(data,each=length(years)))
-    (ys <- rep(years,length(data)))
+    (items <- prepare_items(items))
+    (dt <- rep(items,each=length(years)))
+    (ys <- rep(years,length(items)))
     fmt <- paste0(get_config_path(),'/%s/%s')
     (nhs_dir <- sprintf(fmt,ys,dt) |> do::increase())
     ext <- c("\\.codebook", "\\.label", "\\.tsv", "\\.update", "\\.xpt","\\.sas7bdat")
@@ -26,12 +26,12 @@ nhs_check <- function(years,data){
             stringr::str_extract_all('[0-9]{4}-[0-9]{4}') |>
             do::select(1,drop=TRUE)
         yeari
-        datai <- nhs_dir |>
+        itemi <- nhs_dir |>
             do::select(i) |>
             do::Replace0(get_config_path()) |>
             do::Replace0(yeari) |>
             do::Replace0('/{2,}')
-        datai
+        itemi
         if (i==1){
             cat('\n',yeari)
         }else{
@@ -57,15 +57,15 @@ nhs_check <- function(years,data){
             len
             if (len==5) next(j)
             if (i==1){
-                cat('\n     ',datai)
+                cat('\n     ',itemi)
             }else{
-                datai1 <- nhs_dir |>
+                itemi1 <- nhs_dir |>
                     do::select(i-1) |>
                     do::Replace0(get_config_path()) |>
                     do::Replace0(yeari) |>
                     do::Replace0('/{2,}')
-                if (datai != datai1){
-                    cat('\n     ',datai)
+                if (itemi != itemi1){
+                    cat('\n     ',itemi)
                 }
             }
             cat(crayon::green(paste0('\n          ',fnj,' ',len)))

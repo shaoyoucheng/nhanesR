@@ -39,10 +39,10 @@ nhs_read <- function(...,label=FALSE,codebook=FALSE,nrows=Inf){
         cat(paste0('\n\n',crayon::red(do::Replace0(i,'.*/')),'(',length(filesi),')'))
         for (j in 1:length(filesi)) {
             (filej <- do::file.name(filesi[j]))
-            (dataj <- filesi[j] |> do::upper.dir(end.slash = FALSE) |> do::file.name(extension = FALSE))
+            (itemsj <- filesi[j] |> do::upper.dir(end.slash = FALSE) |> do::file.name(extension = FALSE))
 
             if (j == 1){
-                cat(paste0(' ',dataj))
+                cat(paste0(' ',itemsj))
                 cat(paste0(' ',crayon::blue(filej)))
                 dfj <- data.table::fread(filesi[j],data.table = FALSE,showProgress = FALSE,nrows=nrows)
                 head(dfj)
@@ -80,8 +80,8 @@ nhs_read <- function(...,label=FALSE,codebook=FALSE,nrows=Inf){
 
                 }
             }else{
-                (dataj0 <- filesi[j-1] |> do::upper.dir(end.slash = FALSE) |> do::file.name(extension = FALSE))
-                if (dataj0 != dataj) cat(paste0('\n             ',dataj))
+                (itemsj0 <- filesi[j-1] |> do::upper.dir(end.slash = FALSE) |> do::file.name(extension = FALSE))
+                if (itemsj0 != itemsj) cat(paste0('\n             ',itemsj))
                 cat(paste0(' ',crayon::blue(filej)))
 
                 dfji <- data.table::fread(filesi[j],showProgress = FALSE,data.table = FALSE,nrows=nrows)

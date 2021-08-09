@@ -4,12 +4,12 @@
 \alias{nhs_browse}
 \title{Browse "NHANES" webpage}
 \usage{
-nhs_browse(years, data)
+nhs_browse(years, items)
 }
 \arguments{
 \item{years}{one or more years}
 
-\item{data}{one or more data}
+\item{items}{one or more items}
 }
 \value{
 browse webpage

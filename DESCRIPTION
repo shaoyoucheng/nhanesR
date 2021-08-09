@@ -1,6 +1,6 @@
 Package: nhanesR
 Title: Tools for "NHANES" Database
-Version: 0.9.0.6
+Version: 0.9.0.7
 Authors@R: 
     person(given = "First",
            family = "Last",
