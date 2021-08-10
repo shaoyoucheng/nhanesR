@@ -4,7 +4,7 @@
 \alias{nhs_read}
 \title{Read data from 'NHANES' database in local PC}
 \usage{
-nhs_read(..., label = FALSE, codebook = FALSE, nrows = Inf)
+nhs_read(..., label = FALSE, codebook = TRUE, nrows = Inf)
 }
 \arguments{
 \item{...}{one or more data file path}

@@ -15,7 +15,7 @@
 #'         set::grep_not_or('p_demo')
 #' nhs_read(demo)
 #' }
-nhs_read <- function(...,label=FALSE,codebook=FALSE,nrows=Inf){
+nhs_read <- function(...,label=FALSE,codebook=TRUE,nrows=Inf){
     files <- c(...)
     if (do::cnOS()){
         tsv <- tmcn::toUTF8("\u5FC5\u987B\u662Ftsv\u6587\u4EF6\n     ")
