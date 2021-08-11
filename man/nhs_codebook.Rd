@@ -4,12 +4,12 @@
 \alias{nhs_codebook}
 \title{Codebook for variable}
 \usage{
-nhs_codebook(files, ...)
+nhs_codebook(..., files)
 }
 \arguments{
-\item{files}{missing(suggest) or file path of nhs_files_pc() or dataframe of nhs_select()}
-
 \item{...}{one(suggest) or more variable names}
+
+\item{files}{missing(suggest) or file path of nhs_files_pc() or dataframe of nhs_select()}
 }
 \value{
 variable codebook

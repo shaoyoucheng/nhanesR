@@ -143,7 +143,7 @@ df.tolower <- function(x){
 #' @param pattern for nhs_files_pc()
 #' @param file_ext file extensions for nhs_files_pc(), default is NULL to list all files
 #'
-nhs_files_pc <- function(items,years,pattern=NULL,file_ext=NULL,cat=TRUE){
+nhs_files_pc <- function(pattern=NULL,items,years,exclude=NULL,file_ext=NULL,cat=TRUE){
     if (missing(years)) years <- nhs_year_pc()
     years <- prepare_years(years)
     items <- prepare_items(items)
@@ -155,6 +155,9 @@ nhs_files_pc <- function(items,years,pattern=NULL,file_ext=NULL,cat=TRUE){
     f1 <- list.files(path = d3,pattern = pattern,full.names = TRUE)
     ck <- tools::file_ext(f1) %in% file_ext
     f1[ck]
+    f2 <- f1[ck]
+    if (!is.null(exclude)) f2 <- set::grep_not_or(f2,exclude)
+    f2
 }
 
 select_df <- function(x,...){
@@ -181,7 +184,7 @@ file.info2 <- function(file,i){
 #' @param exclude exclude files
 #' @export
 #'
-nhs_files_tsv <- function(items,years,pattern=NULL,exclude=NULL, cat=TRUE){
+nhs_files_tsv <- function(pattern=NULL,items,years,exclude=NULL, cat=TRUE){
     file_ext='tsv'
     if (missing(years)) years <- nhs_year_pc()
     years <- prepare_years(years)
