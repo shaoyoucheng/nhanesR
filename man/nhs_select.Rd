@@ -4,14 +4,16 @@
 \alias{nhs_select}
 \title{Select column for results of nhs_read() function}
 \usage{
-nhs_select(data, ...)
+nhs_select(data, ..., force_bind = FALSE)
 
-nhs_select(data, ...)
+nhs_select(data, ..., force_bind = FALSE)
 }
 \arguments{
 \item{data}{result of nhs_read()}
 
 \item{...}{paired names, connected by colon.}
+
+\item{force_bind}{logical.}
 
 \item{x}{results of nhs_read() function}
 
