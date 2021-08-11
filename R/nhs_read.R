@@ -4,6 +4,7 @@
 #' @param label logical, whether to add label for variable
 #' @param codebook logical, whether to decode variable
 #' @param nrows The maximum number of rows to read.
+#' @param ignore.case logical. whether to ignore case in codebook
 #'
 #' @return a list contains dataframe
 #' @export
@@ -15,7 +16,7 @@
 #'         set::grep_not_or('p_demo')
 #' nhs_read(demo)
 #' }
-nhs_read <- function(...,label=FALSE,codebook=TRUE,nrows=Inf){
+nhs_read <- function(...,label=TRUE,codebook=TRUE,nrows=Inf,ignore.case = FALSE){
     files <- c(...)
     if (do::cnOS()){
         tsv <- tmcn::toUTF8("\u5FC5\u987B\u662Ftsv\u6587\u4EF6\n     ")
@@ -49,6 +50,7 @@ nhs_read <- function(...,label=FALSE,codebook=TRUE,nrows=Inf){
                     (ckbkf <- do::Replace(filesi[j],'\\.tsv','.codebook'))
                     if (file.exists(ckbkf)){
                         ckbk <- read.delim(ckbkf,comment.char = '#')
+                        if (ignore.case) ckbk$label <- tolower(ckbk$label)
                         head(ckbk)
                         if (nrow(ckbk)>1){
                             for (k in unique(ckbk$variable)) {

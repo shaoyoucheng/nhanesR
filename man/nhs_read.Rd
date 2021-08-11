@@ -4,7 +4,7 @@
 \alias{nhs_read}
 \title{Read data from 'NHANES' database in local PC}
 \usage{
-nhs_read(..., label = FALSE, codebook = TRUE, nrows = Inf)
+nhs_read(..., label = TRUE, codebook = TRUE, nrows = Inf, ignore.case = FALSE)
 }
 \arguments{
 \item{...}{one or more data file path}
@@ -14,6 +14,8 @@ nhs_read(..., label = FALSE, codebook = TRUE, nrows = Inf)
 \item{codebook}{logical, whether to decode variable}
 
 \item{nrows}{The maximum number of rows to read.}
+
+\item{ignore.case}{logical. whether to ignore case in codebook}
 }
 \value{
 a list contains dataframe
