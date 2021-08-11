@@ -178,9 +178,10 @@ file.info2 <- function(file,i){
 
 
 #' @rdname nhs_files
+#' @param exclude exclude files
 #' @export
 #'
-nhs_files_tsv <- function(items,years,pattern=NULL,cat=TRUE){
+nhs_files_tsv <- function(items,years,pattern=NULL,exclude=NULL, cat=TRUE){
     file_ext='tsv'
     if (missing(years)) years <- nhs_year_pc()
     years <- prepare_years(years)
@@ -192,5 +193,7 @@ nhs_files_tsv <- function(items,years,pattern=NULL,cat=TRUE){
     if (!is.null(pattern)) pattern <- paste0(pattern,collapse = '|')
     f1 <- list.files(path = d3,pattern = pattern,full.names = TRUE)
     ck <- tools::file_ext(f1) %in% file_ext
-    f1[ck]
+    f2 <- f1[ck]
+    if (!is.null(exclude)) f2 <- set::grep_not_or(f2,exclude)
+    f2
 }

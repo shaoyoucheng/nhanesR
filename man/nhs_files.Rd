@@ -11,7 +11,7 @@ nhs_files_web(years, items, cat = TRUE, withdrawn = FALSE)
 
 nhs_files_pc(items, years, pattern = NULL, file_ext = NULL, cat = TRUE)
 
-nhs_files_tsv(items, years, pattern = NULL, cat = TRUE)
+nhs_files_tsv(items, years, pattern = NULL, exclude = NULL, cat = TRUE)
 }
 \arguments{
 \item{years}{one or more years}
@@ -23,6 +23,8 @@ nhs_files_tsv(items, years, pattern = NULL, cat = TRUE)
 \item{pattern}{for nhs_files_pc()}
 
 \item{file_ext}{file extensions for nhs_files_pc(), default is NULL to list all files}
+
+\item{exclude}{exclude files}
 }
 \value{
 available data

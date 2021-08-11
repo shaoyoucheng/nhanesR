@@ -27,9 +27,7 @@ nhs_read <- function(...,label=FALSE,codebook=TRUE,nrows=Inf){
         tsv <- paste0(tsv,files)
         stop(tsv)
     }
-    years <- files |>
-        do::Replace0(get_config_path()) |>
-        stringr::str_extract('[0-9]{4}-[0-9]{4}')
+    years <- prepare_years(files)
     (yearu <- years |> unique() |> do::increase())
 
     # file
@@ -54,8 +52,10 @@ nhs_read <- function(...,label=FALSE,codebook=TRUE,nrows=Inf){
                         head(ckbk)
                         if (nrow(ckbk)>1){
                             for (k in unique(ckbk$variable)) {
+                                k <- do::Trim(k)
                                 code <- ckbk[ckbk$variable == k,]
                                 for (cd in 1:nrow(code)) {
+
                                     cdjd <- dfj[,k] == code[cd,'code']
                                     cdjd[is.na(cdjd)] <- FALSE
                                     dfj[cdjd,k] <- code[cd,'label']
