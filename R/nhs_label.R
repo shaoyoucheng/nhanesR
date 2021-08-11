@@ -20,8 +20,8 @@ nhs_label <- function(...,files){
         (Item <- prepare_items(i))
         labeli <- read.delim(i,comment.char = '#')
         if (length(variable) >0){
-            ck <- labeli$variable %in% variable
-            labeli <- labeli[ck,c('variable','label')]
+            ck <- labeli$name %in% variable
+            labeli <- labeli[ck,]
         }
         if (nrow(labeli)==0) return()
         cbind(Year=Year,Item=Item,labeli)
